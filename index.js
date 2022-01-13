@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({limit: '30mb', extended: true}))
 app.use(cors())
 
 
-// Routes
+// Routers
 app.use('/api/v1/items', itemRouter);
 
 const PORT = process.env.PORT || 5000;
