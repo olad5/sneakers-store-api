@@ -1,34 +1,36 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
 import dotenv from 'dotenv'
-import logger from 'morgan'
-import itemRouter from './routes/itemRoutes.js'
-import userRouter from './routes/userRoutes.js'
-import authRouter from './routes/authRoutes.js'
+import mongoose from 'mongoose'
+import process from 'process';
+import app from './app.js'
 
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
 
-const app = express()
-dotenv.config()
-app.use(logger('dev'))
+dotenv.config();
 
-app.use(bodyParser.json({limit: '30mb', extended: true}))
-app.use(bodyParser.urlencoded({limit: '30mb', extended: true}))
-app.use(cors())
-app.use(cookieParser(process.env.JWT_SECRET));
+await mongoose.connect(process.env.CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+  .then(() => console.log('DB connection successful!'))
 
+const port = process.env.PORT || 5000;
+const server = app.listen(port, () => {
+  console.log(`Server Running on Port: http://localhost:${port}`);
+});
 
+process.on('unhandledRejection', err => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
 
-// Routers
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/items', itemRouter);
-
-const PORT = process.env.PORT || 5000;
-
-mongoose.connect(process.env.CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true})
-  .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
-  .catch((error) => console.log(`${error} did not connect`));
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
+});
 
