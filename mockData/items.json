@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Nike Men’s Air Force 1 Low",
+    "price": 25999,
+    "images": [
+      "https://m.media-amazon.com/images/I/21R9OxciB7S._SS47_.jpg",
+      "https://m.media-amazon.com/images/I/31EVfZpS1zL._SS47_.jpg",
+      "https://m.media-amazon.com/images/I/21R9OxciB7S._SS47_.jpg",
+      "https://m.media-amazon.com/images/I/31EVfZpS1zL._SS47_.jpg"
+    ],
+    "company": "nike",
+    "description": "This legendary shoe was originally designed for basketball players. Its non-marking rubber sole gives it a good traction. It has two pivot points in the forefoot and heel for multidirectional transitions. Named after the us president's aircraft it is a legendary icon.",
+    "category": "men"
+  },
+  {
+    "name": "adidas Originals Women's Stan Smith ",
+    "price": 1200,
+    "images": [
+      "https://m.media-amazon.com/images/I/21R9OxciB7S._SS47_.jpg",
+      "https://m.media-amazon.com/images/I/31EVfZpS1zL._SS47_.jpg",
+      "https://m.media-amazon.com/images/I/21R9OxciB7S._SS47_.jpg",
+      "https://m.media-amazon.com/images/I/31EVfZpS1zL._SS47_.jpg"
+    ],
+    "company": "adidas",
+    "description": "Named for one of tennis' all-time greats, the iconic Stan Smith sneakers first stepped onto the court in 1971. Today, the shoes are a streetwear staple. This modern version gives it a fashionable touch with a nubuck upper that's stamped to look like exotic ostrich leather. A gold-foil logo completes the luxe style.",
+    "category": "women"
+  }
+]

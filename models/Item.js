@@ -20,7 +20,6 @@ const ItemSchema = new mongoose.Schema(
     },
     images: {
       type: [String],
-      default: '/uploads/example.jpeg',
     },
     category: {
       type: String,
@@ -56,4 +55,3 @@ const ItemSchema = new mongoose.Schema(
 const Item = mongoose.model('Item', ItemSchema);
 
 export default Item;
-
