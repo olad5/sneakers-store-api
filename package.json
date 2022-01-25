@@ -1,11 +1,12 @@
 {
-  "name": "server",
+  "name": "sneakers-store",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "E commerce site built with node, express and mongodb",
+  "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "Francis Shonubi",
