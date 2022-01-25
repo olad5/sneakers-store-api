@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import process from 'process';
 import app from './app.js'
 
-process.on('uncaughtException', err => {
+process.on('uncaughtException', err => {// uncaught exceptions are meant to stop the server
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   console.log(err.name, err.message);
   process.exit(1);
@@ -16,7 +16,7 @@ await mongoose.connect(process.env.CONNECTION_URL, {useNewUrlParser: true, useUn
 
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
-  console.log(`Server Running on Port: http://localhost:${port}`);
+  console.log(`Server Running on Port: http://localhost:${port}\n`);
 });
 
 process.on('unhandledRejection', err => {
