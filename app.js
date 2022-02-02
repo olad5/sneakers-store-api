@@ -7,6 +7,7 @@ import logger from 'morgan'
 import itemRouter from './routes/itemRoutes.js'
 import userRouter from './routes/userRoutes.js'
 import authRouter from './routes/authRoutes.js'
+import cartRouter from './routes/cartRoutes.js'
 
 
 const app = express()
@@ -23,5 +24,6 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/items', itemRouter);
+app.use('/api/v1/cart', cartRouter);
 
 export default app
