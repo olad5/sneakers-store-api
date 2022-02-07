@@ -1,20 +1,25 @@
 import User from '../models/User.js';
 import {StatusCodes} from 'http-status-codes';
-import * as CustomError from '../errors/index.js';
 import {attachCookiesToResponse, createTokenUser, checkPermissions} from '../utils/index.js';
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({role: 'user'}).select('-password');
-  res.status(StatusCodes.OK).json({users});
+  res.status(StatusCodes.OK).json({users, count: users.length});
 };
 
 const getSingleUser = async (req, res) => {
-  const user = await User.findOne({_id: req.params.id}).select('-password');
-  if (!user) {
-    throw new CustomError.NotFoundError(`No user with id : ${req.params.id}`);
+  try {
+    const user = await User.findOne({_id: req.params.id}).select('-password');
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({message: `No user with id : ${req.params.id}`})
+    }
+    checkPermissions(req.user, user._id);
+    res.status(StatusCodes.OK).json({user});
+
+  } catch (error) {
+
+    res.status(StatusCodes.BAD_REQUEST).json({message: error.message});
   }
-  checkPermissions(req.user, user._id);
-  res.status(StatusCodes.OK).json({user});
 };
 
 const showCurrentUser = async (req, res) => {
@@ -25,38 +30,49 @@ const showCurrentUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const {email, name} = req.body;
-  if (!email || !name) {
-    throw new CustomError.BadRequestError('Please provide all values');
+  try {
+    if (!email || !name) {
+      return res.status(StatusCodes.BAD_REQUEST).json({message: 'Please provide all values'})
+    }
+    const user = await User.findOne({_id: req.user.userId});
+
+    user.email = email;
+    user.name = name;
+
+    await user.save();
+    const tokenUser = createTokenUser(user);
+    attachCookiesToResponse({res, user: tokenUser});
+    res.status(StatusCodes.OK).json({user: tokenUser});
+
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({message: error.message});
+
   }
-  const user = await User.findOne({_id: req.user.userId});
-
-  user.email = email;
-  user.name = name;
-
-  await user.save();
-  const tokenUser = createTokenUser(user);
-  attachCookiesToResponse({res, user: tokenUser});
-  res.status(StatusCodes.OK).json({user: tokenUser});
 };
 
 const updateUserPassword = async (req, res) => {
   const {oldPassword, newPassword} = req.body;
-  if (!oldPassword || !newPassword) {
-    throw new CustomError.BadRequestError('Please provide both values');
-  }
-  const user = await User.findOne({_id: req.user.userId});
+  try {
+    if (!oldPassword || !newPassword) {
+      return res.status(StatusCodes.BAD_REQUEST).json({message: 'Please provide both values'})
+    }
+    const user = await User.findOne({_id: req.user.userId});
 
-  const isPasswordCorrect = await user.comparePassword(oldPassword);
+    const isPasswordCorrect = await user.comparePassword(oldPassword);
 
-  if (!isPasswordCorrect) {
-    throw new CustomError.UnauthenticatedError('Invalid Credentials');
-  }
+    if (!isPasswordCorrect) {
+      return res.status(StatusCodes.BAD_REQUEST).json({message: 'Invalid Credentials'})
+    }
 
-  user.password = newPassword;
+    user.password = newPassword;
 
-  await user.save();
-  res.status(StatusCodes.OK).json({msg: 'Success! Password Updated.'});
+    await user.save();
+    res.status(StatusCodes.OK).json({message: 'Success! Password Updated.'});
 
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({message: error.message});
+
+  };
 };
 
 export {getAllUsers, getSingleUser, showCurrentUser, updateUser, updateUserPassword};
