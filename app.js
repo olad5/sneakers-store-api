@@ -8,6 +8,7 @@ import itemRouter from './routes/itemRoutes.js'
 import userRouter from './routes/userRoutes.js'
 import authRouter from './routes/authRoutes.js'
 import cartRouter from './routes/cartRoutes.js'
+import orderRouter from './routes/orderRoutes.js'
 
 
 const app = express()
@@ -25,5 +26,6 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/items', itemRouter);
 app.use('/api/v1/cart', cartRouter);
+app.use('/api/v1/orders', orderRouter);
 
 export default app
