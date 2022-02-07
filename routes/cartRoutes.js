@@ -1,6 +1,6 @@
 import express from 'express'
 import {authenticateUser} from '../middleware/authentication.js';
-import {addItemToCart, getCart, emptyCart, deleteItemFromCart, updateCart} from '../controllers/cartControllers.js';
+import {addItemToCart, getCart, emptyUserCart, deleteItemFromCart, updateCart} from '../controllers/cartControllers.js';
 
 const router = express.Router()
 
@@ -15,6 +15,6 @@ router
 
 router
   .route('/empty-cart')
-  .delete(authenticateUser, emptyCart);
+  .delete(authenticateUser, emptyUserCart);
 
 export default router

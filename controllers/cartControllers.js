@@ -1,13 +1,8 @@
 import {StatusCodes} from 'http-status-codes'
-import Cart from '../models/Cart.js'
+import {Cart} from '../models/Cart.js'
 import Item from '../models/Item.js';
+import {cartUtil, emptyCartUtil} from '../utils/index.js';
 
-const cartUtil = async (userId) => {
-  // gets the cart associated with the user
-  let cart = await Cart.find({user: userId}).populate({path: "items.itemId", select: "name price total"})
-  cart = cart[0]
-  return cart;
-}
 
 const outOfStockUtil = async (quantInStock, quantInCart, quantity) => {
   //----------checks if the product is out of stock -------
@@ -89,6 +84,7 @@ const addItemToCart = async (req, res) => {
 
 const getCart = async (req, res) => {
   try {
+
     const cart = await cartUtil(req.user.userId)
     if (!cart) {
       return res.status(StatusCodes.NOT_FOUND).json({message: "Cart Not Found", })
@@ -167,15 +163,12 @@ const deleteItemFromCart = async (req, res) => {
   }
 
 }
-const emptyCart = async (req, res) => {
+const emptyUserCart = async (req, res) => {
   try {
-    let cart = await cartUtil(req.user.userId)
-    if (!cart) {
+    let data = await emptyCartUtil(req.user.userId)
+    if (data === 404) {
       return res.status(StatusCodes.NOT_FOUND).json({message: "Cart Not Found", })
     }
-    cart.items = [];// remove all the items from the cart
-    cart.subTotal = 0// resets the subtotal value of the cart 
-    let data = await cart.save();
 
     res.status(StatusCodes.OK).json({mgs: "Cart Has been emptied", data: data})
 
@@ -185,4 +178,4 @@ const emptyCart = async (req, res) => {
   }
 }
 
-export {emptyCart, getCart, addItemToCart, deleteItemFromCart, updateCart};
+export {emptyUserCart, getCart, addItemToCart, deleteItemFromCart, updateCart};
