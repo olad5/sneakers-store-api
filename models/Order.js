@@ -1,16 +1,5 @@
 import mongoose from 'mongoose'
-
-const SingleOrderItemSchema = mongoose.Schema({
-  name: {type: String, required: true},
-  image: {type: String, required: true},
-  price: {type: Number, required: true},// shows the price of an item
-  amount: {type: Number, required: true},// this shows the number of quantities of each item 
-  product: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Product',
-    required: true,
-  },
-});
+import {CartItemSchema} from './Cart.js';
 
 const OrderSchema = mongoose.Schema(
   {
@@ -26,11 +15,12 @@ const OrderSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    total: {
+    total: {// this is subtotal + shippingFee
       type: Number,
       required: true,
     },
-    orderItems: [SingleOrderItemSchema],
+    orderItems: [CartItemSchema],
+
     status: {
       type: String,
       enum: ['pending', 'failed', 'paid', 'delivered', 'canceled'],
@@ -52,6 +42,6 @@ const OrderSchema = mongoose.Schema(
   {timestamps: true}
 );
 
-const Order = mongoose.model('Order', CartSchema);
+const Order = mongoose.model('Order', OrderSchema);
 
 export default Order;
