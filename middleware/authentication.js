@@ -11,8 +11,8 @@ const authenticateUser = async (req, res, next) => {
       throw new CustomError.UnauthenticatedError('Authentication Invalid');
     }
 
-    const {name, userId, role} = isTokenValid({token});
-    req.user = {name, userId, role};
+    const {name, userId, email, role} = isTokenValid({token});
+    req.user = {name, userId, email, role, };
     next();
   } catch (error) {
     res.status(StatusCodes.UNAUTHORIZED).json({message: error.message});
