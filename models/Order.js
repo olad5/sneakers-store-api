@@ -31,12 +31,13 @@ const OrderSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    clientSecret: {
+    paystackRef: {
       type: String,
       required: true,
     },
-    paymentIntentId: {
+    paystackAccesCode: {
       type: String,
+      required: true,
     },
   },
   {timestamps: true}

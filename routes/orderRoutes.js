@@ -14,7 +14,8 @@ router.route('/showAllMyOrders').get(authenticateUser, getCurrentUserOrders);
 router
   .route('/:id')
   .get(authenticateUser, getSingleOrder)
-  .patch(authenticateUser, updateOrder);
+  .patch(authenticateUser, authorizePermissions('admin'), updateOrder);
+
 
 export default router;
 
