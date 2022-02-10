@@ -1,0 +1,10 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "example@gmail.com",
+  "phone": "+23481048917284",
+  "address": "No 12 Johnson Street ikeja",
+  "city": "Lagos",
+  "state": "Lagos State",
+  "zipCode": "100282"
+}
