@@ -2,15 +2,20 @@ import mongoose from 'mongoose'
 import validator from 'validator'
 
 const UserSettingsSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: [true, 'A User must have settings']
+  },
   firstName: {
     type: String,
-    required: [true, 'Please provide name'],
+    required: [true, 'Please provide a first name'],
     minlength: 3,
     maxlength: 50,
   },
   lastName: {
     type: String,
-    required: [true, 'Please provide name'],
+    required: [true, 'Please provide a last name'],
     minlength: 3,
     maxlength: 50,
   },
@@ -25,7 +30,7 @@ const UserSettingsSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, 'Please provide a address'],
+    required: [true, 'Please provide an address'],
     minlength: 6,
   },
   phone: {
@@ -36,7 +41,6 @@ const UserSettingsSchema = new mongoose.Schema({
   city: {
     type: String,
     required: [true, 'Please provide city'],
-    minlength: 6,
   },
   state: {
     type: String,
@@ -44,9 +48,10 @@ const UserSettingsSchema = new mongoose.Schema({
   },
   zipCode: {
     type: String,
-    required: [true, 'Please provide zip codde'],
+    required: [true, 'Please provide zip code'],
   },
 
 })
 
-export default UserSettingsSchema;
+const UserSettings = mongoose.model('UserSettings', UserSettingsSchema);
+export default UserSettings;
