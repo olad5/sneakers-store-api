@@ -11,6 +11,13 @@ import mongoSanitize from 'express-mongo-sanitize'
 import compression from 'compression'
 import hpp from 'hpp'
 
+
+// SWAGGER DOCS
+import swaggerUI from 'swagger-ui-express'
+import YAML from 'yamljs'
+const swaggerDocument = YAML.load('./swagger.yaml');
+
+
 import itemRouter from './routes/itemRoutes.js'
 import userRouter from './routes/userRoutes.js'
 import authRouter from './routes/authRoutes.js'
@@ -58,11 +65,14 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 
 // Routers
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/items', itemRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/checkout', checkoutRouter);
+
 
 export default app

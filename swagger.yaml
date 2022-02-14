@@ -1,0 +1,376 @@
+openapi: 3.0.0
+info:
+  title: Sneaker Store API
+  description: E commerce site built with node, express and mongodb.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api/v1
+    description: local server description.
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User In.
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUserRequest"
+            example:
+              email: susan@gmail.com
+              password: secret
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+  /auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: Log User Out.
+      responses:
+        "200":
+          description: ""
+          headers: {}
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get All Users
+      responses:
+        "200":
+          description: ""
+          headers: {}
+
+  /users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Get a Single  User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        "200":
+          description: ""
+          headers: {}
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /users/showMe:
+    get:
+      tags:
+        - Users
+      summary: Show Current User
+      responses:
+        "200":
+          description: ""
+          headers: {}
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /items:
+    get:
+      tags:
+        - Items
+      summary: Returns a list of all items.
+      responses:
+        "200":
+          description: A JSON array of item names
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /items/{itemId}:
+    get:
+      tags:
+        - Items
+      summary: Returns an item by ID.
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        "200":
+          description: Returns a single item.
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /cart:
+    get:
+      tags:
+        - Cart
+      summary: Gets User's Cart.
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags:
+        - Cart
+      summary: Add item to Cart.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddItemToCartRequest"
+            example:
+              itemId: 61e67be5683b17775b9485f3
+              quantity: 2
+        required: true
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /orders:
+    get:
+      tags:
+        - Orders
+      summary: Get all Orders.
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /orders/showAllMyOrders:
+    get:
+      tags:
+        - Orders
+      summary: Get Current User's Orders.
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Returns an Order by ID.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        "200":
+          description: Returns a Order item.
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - Orders
+      summary: Updates an Order.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderRequest"
+            example:
+              paystackRef: voek1nolps
+      responses:
+        "200":
+          description: Updates and Returns a Order item.
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /checkout:
+    get:
+      tags:
+        - User Settings
+      summary: Gets User's Settings.
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - User Settings
+      summary: Updates User's Settings.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserSettingsRequest"
+            example:
+              firstName: susan
+              lastName: baker
+              email: susan@gmail.com
+              phone: 08012251493
+              address: No 10 Johnson St, Ikeja
+              city: Lagos
+              state: Lagos
+              zipCode: 100282
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: User gave a bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+    LoginUserRequest:
+      title: LoginUserRequest
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: susan@gmail.com
+        password: secret
+    AddItemToCartRequest:
+      title: AddItemToCartRequest
+      required:
+        - itemId
+        - quantity
+      type: object
+      properties:
+        itemId:
+          type: string
+        quantity:
+          type: integer
+      example:
+        itemId: 61e67ae5683b17775b9485f3
+        quantity: 2
+    UpdateOrderRequest:
+      title: UpdateOrderRequest
+      required:
+        - paystackRef
+      type: object
+      properties:
+        paystackRef:
+          type: string
+      example:
+        paystackRef: voek1nolps
+    UpdateUserSettingsRequest:
+      title: UpdateUserSettingsRequest
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: string
+      example:
+        firstName: susan
+        lastName: baker
+        email: susan@gmail.com
+        phone: 08012251493
+        address: No 10 Johnson St, Ikeja
+        city: Lagos
+        state: Lagos
+        zipCode: 100282
