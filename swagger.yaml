@@ -1,12 +1,41 @@
 openapi: 3.0.0
 info:
   title: Sneaker Store API
-  description: E commerce site built with node, express and mongodb.
+  description: E commerce API built with node, express and mongodb.
   version: 1.0.0
 servers:
   - url: http://localhost:5000/api/v1
-    description: local server description.
+    description: local server.
 paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new  User.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+            example:
+              email: susan@gmail.com
+              password: secret
+              name: susan
+        required: true
+      responses:
+        "201":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
   /auth/login:
     post:
       tags:
@@ -27,6 +56,18 @@ paths:
         "200":
           description: ""
           headers: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Unauthorized"
   /auth/logout:
     get:
       tags:
@@ -62,6 +103,12 @@ paths:
         "200":
           description: ""
           headers: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -74,8 +121,56 @@ paths:
         "200":
           description: ""
           headers: {}
-        "404":
-          $ref: "#/components/responses/NotFound"
+  /users/updateUser:
+    patch:
+      tags:
+        - Users
+      summary: Update Current User details.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddItemToCartRequest"
+            example:
+              email: susan@gmail.com
+              name: susan
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+  /users/updateUserPassword:
+    patch:
+      tags:
+        - Users
+      summary: Update Current User's Password.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserPasswordRequest"
+            example:
+              oldPassword: secret
+              newPassword: secret
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
   /items:
     get:
       tags:
@@ -88,6 +183,38 @@ paths:
             application/json:
               schema:
                 type: object
+    post:
+      tags:
+        - Items
+      summary: Creates a new item.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNewItemRequest"
+            example:
+              name: Nike Men’s Air Force 1 Low
+              price: 1200
+              company: nike
+              description: This legendary shoe was originally designed for basketball players. Its non-marking rubber sole gives it a good traction. It has two pivot points in the forefoot and heel for multidirectional transitions. Named after the us president's aircraft it is a legendary icon.
+              category: men
+        required: true
+      responses:
+        "201":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /items/{itemId}:
     get:
@@ -110,6 +237,55 @@ paths:
                 type: object
         "404":
           $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - Items
+      summary: Updates a single Item(Also use this to upload product images).
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+      requestBody:
+        description: ""
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/UpdateItemRequest"
+            example:
+              price: 1200
+              images: Upload 4 images
+      responses:
+        "200":
+          description: Updates and Returns a Order item.
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Items
+      summary: Deletes an Item.
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /cart:
     get:
@@ -123,6 +299,12 @@ paths:
             application/json:
               schema:
                 type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
     post:
@@ -146,9 +328,98 @@ paths:
             application/json:
               schema:
                 type: object
+        "201":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - Cart
+      summary: Updates a User's Cart.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddItemToCartRequest"
+            example:
+              itemId: 61e67be5683b17775b9485f3
+              quantity: 2
+        required: true
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Cart
+      summary: Removes an Item from a User's Cart.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RemoveItemToCartRequest"
+            example:
+              itemId: 61e67be5683b17775b9485f3
+        required: true
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
 
+  /cart/empty-cart:
+    delete:
+      tags:
+        - Cart
+      summary: Empties a User's Cart.
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /orders:
     get:
       tags:
@@ -161,6 +432,35 @@ paths:
             application/json:
               schema:
                 type: object
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags:
+        - Orders
+      summary: Creates a new Order.
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNewOrderRequest"
+            example:
+              tax: 14
+              shippingFee: 67
+        required: true
+      responses:
+        "201":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -307,6 +607,24 @@ components:
       required:
         - code
         - message
+    RegisterUserRequest:
+      title: LoginUserRequest
+      required:
+        - email
+        - password
+        - name
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+      example:
+        email: susan@gmail.com
+        password: secret
+        name: susan
     LoginUserRequest:
       title: LoginUserRequest
       required:
@@ -321,6 +639,46 @@ components:
       example:
         email: susan@gmail.com
         password: secret
+    CreateNewItemRequest:
+      title: CreateNewItemRequest
+      type: object
+      required:
+        - name
+        - price
+        - company
+        - description
+        - category
+      properties:
+        name:
+          type: string
+        price:
+          type: integer
+        company:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+      example:
+        name: Nike Men’s Air Force 1 Low
+        price: 1200
+        company: nike
+        description: This legendary shoe was originally designed for basketball players. Its non-marking rubber sole gives it a good traction. It has two pivot points in the forefoot and heel for multidirectional transitions. Named after the us president's aircraft it is a legendary icon.
+        category: men
+    CreateNewOrderRequest:
+      title: CreateNewOrderRequest
+      type: object
+      required:
+        - tax
+        - shippingFee
+      properties:
+        tax:
+          type: integer
+        shippingFee:
+          type: integer
+      example:
+        tax: 14
+        shippingFee: 67
     AddItemToCartRequest:
       title: AddItemToCartRequest
       required:
@@ -335,6 +693,16 @@ components:
       example:
         itemId: 61e67ae5683b17775b9485f3
         quantity: 2
+    RemoveItemToCartRequest:
+      title: RemoveItemToCartRequest
+      required:
+        - itemId
+      type: object
+      properties:
+        itemId:
+          type: string
+      example:
+        itemId: 61e67ae5683b17775b9485f3
     UpdateOrderRequest:
       title: UpdateOrderRequest
       required:
@@ -374,3 +742,41 @@ components:
         city: Lagos
         state: Lagos
         zipCode: 100282
+    UpdateUserRequest:
+      title: UpdateUserRequest
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+      example:
+        email: susan@gmail.com
+        name: susan
+    UpdateUserPasswordRequest:
+      title: UpdateUserPasswordRequest
+      type: object
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+      example:
+        oldPassword: secret
+        newPassword: secret
+    UpdateItemRequest:
+      title: UpdateItemRequest
+      type: object
+      properties:
+        price:
+          type: string
+        # freeShipping:
+        #   type: string
+        images:
+          type: array
+          items:
+            type: string
+            format: binary
+      example:
+        price: 1200
+        images: Upload 4 images
