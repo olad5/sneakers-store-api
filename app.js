@@ -70,9 +70,6 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 
 // Routers
-app.use('/', (req, res) => {
-  res.send('Sneaker Store API')
-});
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/api/v1/auth', authRouter);
@@ -82,6 +79,9 @@ app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/checkout', checkoutRouter);
 
+app.use('/', (req, res) => {
+  res.send('Sneaker Store API')
+});
 // Custom error handlers
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
