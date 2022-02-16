@@ -4,8 +4,10 @@ info:
   description: E commerce API built with node, express and mongodb.
   version: 1.0.0
 servers:
+  - url: https://sneaker-store-api.herokuapp.com/api/v1
+    description: Production server (uses live data)
   - url: http://localhost:5000/api/v1
-    description: local server.
+    description: Sandbox server (uses test data)
 paths:
   /auth/register:
     post:
