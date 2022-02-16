@@ -10,37 +10,31 @@ import * as cloudinaryOps from '../utils/cloudinaryOps.js'
 const createItem = async (req, res) => {
   req.body.user = req.user.userId;
   const product = await Item.create(req.body);
-  res.status(StatusCodes.CREATED).json({product});
+  let data = await product.save();
+  res.status(StatusCodes.CREATED).json({status: true, message: "Item Created", data});
 };
 
 const getAllItems = async (req, res) => {
   const products = await Item.find({});
-
-  res.status(StatusCodes.OK).json({products, count: products.length});
+  res.status(StatusCodes.OK).json({status: true, message: "Items retrieved", products, count: products.length});
 };
 
 const getSingleItem = async (req, res) => {
   const {id: productId} = req.params;
 
-  try {
-    const product = await Item.findOne({_id: productId})
+  const product = await Item.findOne({_id: productId})
 
-    if (!product) {
-      throw new CustomError.NotFoundError(`No product with id : ${productId}`);
-    }
-
-    res.status(StatusCodes.OK).json({product});
-  } catch (error) {
-    res.status(StatusCodes.NOT_FOUND).json({message: error.message});
+  if (!product) {
+    throw new CustomError.NotFoundError(`No product with id : ${productId}`);
   }
 
+  res.status(StatusCodes.OK).json({status: true, message: "Item retrieved", product});
 
 };
 
 
 const updateItem = async (req, res) => {
   const {id: productId} = req.params;
-
   const product = await Item.findOneAndUpdate({_id: productId}, req.body, {
     new: true,
     runValidators: true,
@@ -50,24 +44,19 @@ const updateItem = async (req, res) => {
     throw new CustomError.NotFoundError(`No product with id : ${productId}`);
   }
 
-  res.status(StatusCodes.OK).json({product});
+  res.status(StatusCodes.OK).json({status: true, message: "Item updated", product});
 };
 
 const deleteItem = async (req, res) => {
   const {id: productId} = req.params;
-  try {
-    const product = await Item.findOne({_id: productId});
+  const product = await Item.findOne({_id: productId});
 
-    if (!product) {
-      throw new CustomError.NotFoundError(`No product with id : ${productId}`);
-    }
-    await product.remove();
-    res.status(StatusCodes.OK).json({message: 'Success! Item removed.'});
-
-  } catch (error) {
-    res.status(StatusCodes.NOT_FOUND).json({message: error.message});
+  if (!product) {
+    throw new CustomError.NotFoundError(`No product with id : ${productId}`);
   }
 
+  await product.remove();
+  res.status(StatusCodes.OK).json({status: true, message: 'Success!, Item removed.'});
 
 };
 
@@ -75,16 +64,24 @@ const deleteItem = async (req, res) => {
 const uploadImages = async (req, res, next) => {
 
   imageUploadMiddleware(req, res, async function (err) {
+
+    const imagefileSizes = req.files.map(file => file.size);//file sizes of images uploaded
+
+    let isOverLimit = imagefileSizes.every(function (imageSize) {
+      return imageSize < 1024 * 1024;// checks if the image Sizes are over 1MB
+    });
+
     if ((req.files).length == 0) return next();// if there are no files, it means you just want to change the other item properties
+
     try {
       if ((req.files).length < 4) {// handles response when less than 4 files are uploaded
         throw new CustomError.BadRequestError('Please upload 4 images');
       }
+      if (!isOverLimit) {
+        throw new CustomError.BadRequestError('Please upload images smaller than 1MB');
+      }
 
       if (err instanceof multer.MulterError) {
-        if (err.code == 'LIMIT_FILE_SIZE') {
-          throw new CustomError.BadRequestError('Please upload image smaller than 1MB');
-        }
 
         if (err.code == 'LIMIT_UNEXPECTED_FILE') {//handler if more than 4 images are uploaded
           throw new CustomError.BadRequestError('Too many Files');
@@ -101,17 +98,14 @@ const uploadImages = async (req, res, next) => {
         let path = parsedImage(file).content// turns  each file to a URI
         let newPath = await uploader(path)// uploads the data to cloudinary
         req.body.images.push(newPath.url)// send the images links to the next middleware to update the DB)
-        console.log('files uploaded successfully')
-
-
       }
       next()
     } catch (error) {
-      res.status(StatusCodes.BAD_REQUEST).json({message: error.message});
+      next(error)
 
     }
 
   })
 
 };
-export {createItem, getAllItems, getSingleItem, updateItem, deleteItem, uploadImages, imageUploadMiddleware};
+export {createItem, getAllItems, getSingleItem, updateItem, deleteItem, uploadImages};
