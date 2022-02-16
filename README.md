@@ -6,6 +6,10 @@ An e-commerce API built with node, express and mongodb.
 
 ![](./public/uploads/sneaker-store-api-swagger.png)
 
+### Links
+
+- Solution URL: [Sneaker Store](https://sneaker-store-api.herokuapp.com/api-docs/)
+
 
 In order to spin up the project, in the root create .env with these two variables, with your own values.
 
