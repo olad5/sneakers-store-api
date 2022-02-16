@@ -15,7 +15,6 @@ const emptyCartUtil = async (userId) => {
     return data
 
   } catch (err) {
-    console.log(err)
     res.status(StatusCodes.BAD_REQUEST).json({message: "Something Went Wrong", err: err})
   }
 }

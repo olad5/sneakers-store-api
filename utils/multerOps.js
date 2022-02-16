@@ -1,22 +1,23 @@
 import multer from 'multer';
 import path from 'path';
 import DatauriParser from "datauri/parser.js";
+import *  as CustomError from '../errors/index.js'
 
 const imageStorage = multer.memoryStorage();
 
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new CustomError.BadRequestError('Not an image! Please upload only images.'));
+  }
+};
+
 const imageUpload = multer({
   storage: imageStorage,
-  limits: {
-    fileSize: 1024 * 1024
-  },
-  fileFilter(req, file, cb) {
-    if (!file.mimetype.startsWith('image')) {
-      return cb(new CustomError.BadRequestError('Please Upload Images'))
-    }
-    cb(undefined, true)
-  }
-}
-)
+  fileFilter: multerFilter
+
+})
 
 const imageUploadMiddleware = imageUpload.array('images', 4)
 

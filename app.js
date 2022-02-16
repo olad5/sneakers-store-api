@@ -1,4 +1,5 @@
 import express from 'express'
+import 'express-async-errors';// package to catch async errors
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -10,6 +11,8 @@ import xss from 'xss-clean'
 import mongoSanitize from 'express-mongo-sanitize'
 import compression from 'compression'
 import hpp from 'hpp'
+import errorHandlerMiddleware from './middleware/error-handler.js';
+import notFoundMiddleware from './middleware/not-found.js';
 
 
 // SWAGGER DOCS
@@ -28,6 +31,8 @@ import checkoutRouter from './routes/checkoutRoutes.js'
 // Start express app
 const app = express()
 dotenv.config()
+
+
 app.use(logger('dev'))
 
 // Limit requests from same API
@@ -73,6 +78,10 @@ app.use('/api/v1/items', itemRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/checkout', checkoutRouter);
+
+// Custom error handlers
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 
 export default app
