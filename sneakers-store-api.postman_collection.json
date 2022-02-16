@@ -1,0 +1,1038 @@
+{
+	"info": {
+		"_postman_id": "261adb92-9f4a-4edf-9036-6bd5094859df",
+		"name": "sneakers-store-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Routes",
+			"item": [
+				{
+					"name": "Get all Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/users/",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/users/61e0b4ea10dbce0d2698bc36",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"users",
+								"61e0b4ea10dbce0d2698bc36"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show current User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/users/showMe",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"users",
+								"showMe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Password",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oldPassword",
+									"value": "jackson",
+									"type": "default"
+								},
+								{
+									"key": "newPassword",
+									"value": "",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{sneaker_api_url}}/users/updateUserPassword",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"users",
+								"updateUserPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Details",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "{{user_mail}}",
+									"type": "default"
+								},
+								{
+									"key": "name",
+									"value": "Susan",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{sneaker_api_url}}/users/updateUser",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"users",
+								"updateUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Item Routes",
+			"item": [
+				{
+					"name": "Get all Items",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/items/",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"items",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/items/61f86eee500e382aa245a2f3",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"items",
+								"61f86eee500e382aa245a2f3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"name\": \"Adidas Stan smith\",\n    \"price\": 1200,\n    \"images\": [\n      \"https://m.media-amazon.com/images/I/21R9OxciB7S._SS47_.jpg\",\n      \"https://m.media-amazon.com/images/I/31EVfZpS1zL._SS47_.jpg\",\n      \"https://m.media-amazon.com/images/I/21R9OxciB7S._SS47_.jpg\",\n      \"https://m.media-amazon.com/images/I/31EVfZpS1zL._SS47_.jpg\"\n    ],\n    \"company\": \"adidas\",\n    \"description\": \"This legendary adidas blah blah blah . Its non-marking rubber sole gives it a good traction. It has two pivot points in the forefoot and heel for multidirectional transitions. Named after the us president's aircraft it is a legendary icon.\",\n    \"category\": \"women\"\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneaker_api_url}}/items/",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"items",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update  Single Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"name\": \"Nike Men’s Air Force 1 Low\",\n    \"price\": 200,\n    \"images\": [\n      \"https://m.media-amazon.com/images/I/21R9OxciB7S._SS47_.jpg\",\n      \"https://m.media-amazon.com/images/I/31EVfZpS1zL._SS47_.jpg\"\n    ],\n    \"company\": \"nike\",\n    \"description\": \"Changed description\",\n    \"category\": \"men\"\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneaker_api_url}}/items/61e679d8d7297c45734f9478",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"items",
+								"61e679d8d7297c45734f9478"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete  Single Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/items/61e679d8d7297c45734f9475",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"items",
+								"61e679d8d7297c45734f9475"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth Routes",
+			"item": [
+				{
+					"name": "Log User Out",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Set the Cookie\", function () {",
+									"    const  cookie = (pm.response.headers.get('Set-Cookie')) ",
+									"    pm.environment.set('user_cookie', '')",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{sneakers-base-url}}/auth/logout",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Log User In",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has a JSON body\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Set the Cookie\", function () {",
+									"    const  cookie = (pm.response.headers.get('Set-Cookie')) ",
+									"    pm.environment.set('user_cookie', cookie)",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "{{user_mail}}",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "{{user_password}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{sneaker_api_url}}/auth/login",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register New User ",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{sneaker_api_url}}/auth/register",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checkout Routes",
+			"item": [
+				{
+					"name": "Get User settings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{sneakers-base-url}}/checkout",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User settings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"example@gmail.com\",\n  \"phone\": \"+23481048917284\",\n  \"address\": \"No 12 Williams Street Lagos\",\n  \"city\": \"Lagos\",\n  \"state\": \"Lagos State\",\n  \"zipCode\": \"100282\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneakers-base-url}}/checkout",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Routes",
+			"item": [
+				{
+					"name": "Get all Orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/orders/",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A Single Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/orders/61ff247f2ef386384b4a6688",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"orders",
+								"61ff247f2ef386384b4a6688"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User's Orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneaker_api_url}}/orders/showAllMyOrders",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"orders",
+								"showAllMyOrders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"tax\": 213,\n    \"shippingFee\": 19\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneaker_api_url}}/orders/",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paystackRef\": \"ssy3urgj1v\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneaker_api_url}}/orders/6203a019e4fa96718097825e",
+							"host": [
+								"{{sneaker_api_url}}"
+							],
+							"path": [
+								"orders",
+								"6203a019e4fa96718097825e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart  Routes",
+			"item": [
+				{
+					"name": "Get User cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneakers-base-url}}/cart/",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"cart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Item to Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"itemId\": \"61f86eee500e382aa245a2f3\",\n    \"quantity\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneakers-base-url}}/cart/",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"cart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"itemId\": \"61e67ae5683b17775b9485f3\",\n    \"quantity\": 11\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneakers-base-url}}/cart/",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"cart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Item from Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"itemId\": \"61edd4c4d0de18072aeee9ee\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{sneakers-base-url}}/cart/",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"cart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Empty User Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{user_cookie}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{sneakers-base-url}}/cart/empty-cart",
+							"host": [
+								"{{sneakers-base-url}}"
+							],
+							"path": [
+								"cart",
+								"empty-cart"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "sneaker_api_url",
+			"value": "http://localhost:5000/api/v1"
+		}
+	]
+}
