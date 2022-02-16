@@ -70,6 +70,9 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 
 // Routers
+app.use('/', (req, res) => {
+  res.send('Sneaker Store API')
+});
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/api/v1/auth', authRouter);
