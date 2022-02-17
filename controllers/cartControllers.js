@@ -1,4 +1,3 @@
-import {StatusCodes} from 'http-status-codes'
 import {Cart} from '../models/Cart.js'
 import Item from '../models/Item.js';
 import {cartUtil, emptyCartUtil} from '../utils/index.js';
@@ -59,7 +58,7 @@ const addItemToCart = async (req, res) => {
       throw new CustomError.BadRequestError("Invalid request");
     }
     let data = await cart.save();
-    res.status(StatusCodes.OK).json({status: true, message: "Item added to cart", data: data})
+    res.status(200).json({status: true, message: "Item added to cart", data: data})
   }
   //------------ if there is no user with a cart...it creates a new cart and then adds the item to the cart that has been created------------
   else {
@@ -74,7 +73,7 @@ const addItemToCart = async (req, res) => {
       subTotal: parseInt(productDetails.price * quantity)
     }
     cart = await Cart.create(cartData)
-    res.status(StatusCodes.CREATED).json({status: true, message: "Cart created", data: cart})
+    res.status(201).json({status: true, message: "Cart created", data: cart})
   }
 }
 
@@ -84,7 +83,7 @@ const getCart = async (req, res) => {
   if (!cart) {
     throw new CustomError.NotFoundError("Cart Not Found");
   }
-  res.status(StatusCodes.OK).json({status: true, message: "Cart retrieved", data: cart})
+  res.status(200).json({status: true, message: "Cart retrieved", data: cart})
 }
 
 const updateCart = async (req, res) => {
@@ -114,7 +113,7 @@ const updateCart = async (req, res) => {
   cart.items[indexFound].price = productDetails.price
   cart.subTotal = cart.items.map(item => item.total).reduce((acc, next) => acc + next);
   let data = await cart.save();
-  res.status(StatusCodes.OK).json({status: true, message: "Cart updated", data: data})
+  res.status(200).json({status: true, message: "Cart updated", data: data})
 
 }
 
@@ -138,7 +137,7 @@ const deleteItemFromCart = async (req, res) => {
     cart.subTotal = 0
   }
   let data = await cart.save();
-  res.status(StatusCodes.OK).json({status: true, message: "Item removed from cart", data: data})
+  res.status(200).json({status: true, message: "Item removed from cart", data: data})
 
 }
 const emptyUserCart = async (req, res) => {
@@ -147,7 +146,7 @@ const emptyUserCart = async (req, res) => {
     throw new CustomError.NotFoundError("Cart Not Found");
   }
 
-  res.status(StatusCodes.OK).json({status: true, message: "Cart Has been emptied", data: data})
+  res.status(200).json({status: true, message: "Cart Has been emptied", data: data})
 }
 
 export {emptyUserCart, getCart, addItemToCart, deleteItemFromCart, updateCart};

@@ -1,9 +1,8 @@
-import {StatusCodes} from 'http-status-codes'
 import UserSettings from '../models/UserSettings.js';
 
 const getUserSettings = async (req, res) => {
   const userSettings = await UserSettings.find({status: true, user: req.user.userId})
-  res.status(StatusCodes.OK).json({status: true, message: "Settings Retrieved", userSettings: userSettings});
+  res.status(200).json({status: true, message: "Settings Retrieved", userSettings: userSettings});
 }
 
 
@@ -26,7 +25,7 @@ const updateUserSettings = async (req, res) => {
     });
 
     let data = await initialSettings.save();
-    return res.status(StatusCodes.CREATED).json({status: true, message: 'Settings created', userSettings: data});
+    return res.status(201).json({status: true, message: 'Settings created', userSettings: data});
   }
 
 
@@ -36,7 +35,7 @@ const updateUserSettings = async (req, res) => {
     runValidators: true,
   });
 
-  return res.status(StatusCodes.OK).json({status: true, message: 'Settings updated', data: userSettings});
+  return res.status(200).json({status: true, message: 'Settings updated', data: userSettings});
 
 }
 

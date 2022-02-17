@@ -1,6 +1,5 @@
 import Order from '../models/Order.js';
 import Item from '../models/Item.js';
-import {StatusCodes} from 'http-status-codes';
 import {checkPermissions} from '../utils/checkPermissions.js';
 import {emptyCartUtil, cartUtil} from '../utils/index.js';
 import *  as CustomError from '../errors/index.js'
@@ -50,7 +49,7 @@ const createOrder = async (req, res) => {
     let data = await order.save();
     await emptyCartUtil(req.user.userId)// emptys the cart once the order has been made
 
-    return res.status(StatusCodes.CREATED).json({status: true, message: "Order Initiated", data: order})
+    return res.status(201).json({status: true, message: "Order Initiated", data: order})
 
 
 
@@ -58,7 +57,7 @@ const createOrder = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
     const orders = await Order.find({}).sort({createdAt: 'desc'});
-    res.status(StatusCodes.OK).json({status: true, message: "Orders Retrieved", orders, count: orders.length});
+    res.status(200).json({status: true, message: "Orders Retrieved", orders, count: orders.length});
 };
 
 const getSingleOrder = async (req, res) => {
@@ -68,13 +67,13 @@ const getSingleOrder = async (req, res) => {
         throw new CustomError.NotFoundError(`No order with id : ${orderId}`);
     }
     checkPermissions(req.user, order.user);
-    res.status(StatusCodes.OK).json({status: true, message: "Order Retrieved", order});
+    res.status(200).json({status: true, message: "Order Retrieved", order});
 
 };
 
 const getCurrentUserOrders = async (req, res) => {
     const orders = await Order.find({user: req.user.userId}).select('-paystackRef -paystackAccesCode');
-    res.status(StatusCodes.OK).json({status: true, message: "Current User Orders Retrieved", orders, count: orders.length});
+    res.status(200).json({status: true, message: "Current User Orders Retrieved", orders, count: orders.length});
 };
 
 
@@ -108,7 +107,7 @@ const updateOrder = async (req, res) => {// this is for updating the order after
         await order.save();
     }
 
-    res.status(StatusCodes.OK).json({status: true, message: "Order Updated", order});
+    res.status(200).json({status: true, message: "Order Updated", order});
 
 };
 

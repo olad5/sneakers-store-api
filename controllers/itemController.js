@@ -1,4 +1,3 @@
-import {StatusCodes} from 'http-status-codes'
 import Item from '../models/Item.js'
 import multer from 'multer';
 import *  as CustomError from '../errors/index.js'
@@ -11,12 +10,12 @@ const createItem = async (req, res) => {
   req.body.user = req.user.userId;
   const product = await Item.create(req.body);
   let data = await product.save();
-  res.status(StatusCodes.CREATED).json({status: true, message: "Item Created", data});
+  res.status(201).json({status: true, message: "Item Created", data});
 };
 
 const getAllItems = async (req, res) => {
   const products = await Item.find({});
-  res.status(StatusCodes.OK).json({status: true, message: "Items retrieved", products, count: products.length});
+  res.status(200).json({status: true, message: "Items retrieved", products, count: products.length});
 };
 
 const getSingleItem = async (req, res) => {
@@ -28,7 +27,7 @@ const getSingleItem = async (req, res) => {
     throw new CustomError.NotFoundError(`No product with id : ${productId}`);
   }
 
-  res.status(StatusCodes.OK).json({status: true, message: "Item retrieved", product});
+  res.status(200).json({status: true, message: "Item retrieved", product});
 
 };
 
@@ -44,7 +43,7 @@ const updateItem = async (req, res) => {
     throw new CustomError.NotFoundError(`No product with id : ${productId}`);
   }
 
-  res.status(StatusCodes.OK).json({status: true, message: "Item updated", product});
+  res.status(200).json({status: true, message: "Item updated", product});
 };
 
 const deleteItem = async (req, res) => {
@@ -56,7 +55,7 @@ const deleteItem = async (req, res) => {
   }
 
   await product.remove();
-  res.status(StatusCodes.OK).json({status: true, message: 'Success!, Item removed.'});
+  res.status(200).json({status: true, message: 'Success!, Item removed.'});
 
 };
 

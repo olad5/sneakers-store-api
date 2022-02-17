@@ -1,4 +1,3 @@
-import {StatusCodes} from 'http-status-codes'
 import User from '../models/User.js'
 import {attachCookiesToResponse} from '../utils/jwt.js';
 import createTokenUser from '../utils/createTokenUser.js';
@@ -20,7 +19,7 @@ export const register = async (req, res) => {
   const tokenUser = createTokenUser(user);
   attachCookiesToResponse({res, user: tokenUser});
 
-  res.status(StatusCodes.CREATED).json({status: true, message: 'Account created', user: tokenUser});
+  res.status(201).json({status: true, message: 'Account created', user: tokenUser});
 
 };
 
@@ -44,7 +43,7 @@ export const login = async (req, res) => {
   const tokenUser = createTokenUser(user);
   attachCookiesToResponse({res, user: tokenUser});
 
-  res.status(StatusCodes.OK).json({status: true, message: 'User Logged In', user: tokenUser});
+  res.status(200).json({status: true, message: 'User Logged In', user: tokenUser});
 };
 
 export const logout = async (req, res) => {
@@ -52,6 +51,6 @@ export const logout = async (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + 1000),
   });
-  res.status(StatusCodes.OK).json({status: true, message: 'User Logged Out!'});
+  res.status(200).json({status: true, message: 'User Logged Out!'});
 };
 

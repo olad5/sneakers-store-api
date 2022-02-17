@@ -1,4 +1,3 @@
-import {StatusCodes} from "http-status-codes";
 import cartUtil from "./cartUtil.js";
 
 const emptyCartUtil = async (userId) => {
@@ -6,7 +5,7 @@ const emptyCartUtil = async (userId) => {
     let cart = await cartUtil(userId)
 
     if (!cart) {
-      return StatusCodes.NOT_FOUND
+      return 404
     }
     cart.items = [];// remove all the items from the cart
     cart.subTotal = 0// resets the subtotal value of the cart 
@@ -15,7 +14,7 @@ const emptyCartUtil = async (userId) => {
     return data
 
   } catch (err) {
-    res.status(StatusCodes.BAD_REQUEST).json({message: "Something Went Wrong", err: err})
+    res.status(400).json({message: "Something Went Wrong", err: err})
   }
 }
 
