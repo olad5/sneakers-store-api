@@ -79,9 +79,10 @@ app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/checkout', checkoutRouter);
 
-app.use('/', (req, res) => {
-  res.send('Sneaker Store API')
+app.use('*', (req, res) => {
+  res.redirect('https://github.com/olad5/sneakers-store-api')
 });
+
 // Custom error handlers
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
