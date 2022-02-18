@@ -1,14 +1,14 @@
 import User from '../models/User.js'
 import {attachCookiesToResponse} from '../utils/jwt.js';
 import createTokenUser from '../utils/createTokenUser.js';
-import * as CustomError from '../errors/index.js';
+import {CustomAPIError} from '../errors/custom-api.js';
 
 export const register = async (req, res) => {
   const {email, name, password} = req.body;
 
   const emailAlreadyExists = await User.findOne({email});
   if (emailAlreadyExists) {
-    throw new CustomError.BadRequestError('Email already exists');
+    throw new CustomAPIError('Email already exists', 400);
   }
 
   // first registered user is automatically an admin
@@ -27,17 +27,17 @@ export const login = async (req, res) => {
   const {email, password} = req.body;
 
   if (!email || !password) {
-    throw new CustomError.BadRequestError('Please provide email and password');
+    throw new CustomAPIError('Please provide email and password', 400);
   }
   const user = await User.findOne({email});
 
   if (!user) {
-    throw new CustomError.UnauthenticatedError('Invalid Credentials');
+    throw new CustomAPIError('Invalid Credentials', 401);
   }
 
   const isPasswordCorrect = await user.comparePassword(password);
   if (!isPasswordCorrect) {
-    throw new CustomError.UnauthenticatedError('Invalid Credentials');
+    throw new CustomAPIError('Invalid Credentials', 401);
   }
 
   const tokenUser = createTokenUser(user);

@@ -1,10 +1,8 @@
 import Item from '../models/Item.js'
 import multer from 'multer';
-import *  as CustomError from '../errors/index.js'
+import {CustomAPIError} from '../errors/custom-api.js';
 import {parsedImage, imageUploadMiddleware} from '../utils/multerOps.js'
 import * as cloudinaryOps from '../utils/cloudinaryOps.js'
-
-
 
 const createItem = async (req, res) => {
   req.body.user = req.user.userId;
@@ -24,7 +22,7 @@ const getSingleItem = async (req, res) => {
   const product = await Item.findOne({_id: productId})
 
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id : ${productId}`);
+    throw new CustomAPIError(`No product with id : ${productId}`, 404);
   }
 
   res.status(200).json({status: true, message: "Item retrieved", product});
@@ -40,7 +38,7 @@ const updateItem = async (req, res) => {
   });
 
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id : ${productId}`);
+    throw new CustomAPIError(`No product with id : ${productId}`, 404);
   }
 
   res.status(200).json({status: true, message: "Item updated", product});
@@ -51,7 +49,7 @@ const deleteItem = async (req, res) => {
   const product = await Item.findOne({_id: productId});
 
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id : ${productId}`);
+    throw new CustomAPIError(`No product with id : ${productId}`, 404);
   }
 
   await product.remove();
@@ -74,16 +72,16 @@ const uploadImages = async (req, res, next) => {
 
     try {
       if ((req.files).length < 4) {// handles response when less than 4 files are uploaded
-        throw new CustomError.BadRequestError('Please upload 4 images');
+        throw new CustomAPIError('Please upload 4 images', 400);
       }
       if (!isOverLimit) {
-        throw new CustomError.BadRequestError('Please upload images smaller than 1MB');
+        throw new CustomAPIError('Please upload images smaller than 1MB', 400);
       }
 
       if (err instanceof multer.MulterError) {
 
         if (err.code == 'LIMIT_UNEXPECTED_FILE') {//handler if more than 4 images are uploaded
-          throw new CustomError.BadRequestError('Too many Files');
+          throw new CustomAPIError('Too many Files', 400);
         }
 
       }

@@ -2,7 +2,7 @@ import Order from '../models/Order.js';
 import Item from '../models/Item.js';
 import {checkPermissions} from '../utils/checkPermissions.js';
 import {emptyCartUtil, cartUtil} from '../utils/index.js';
-import *  as CustomError from '../errors/index.js'
+import {CustomAPIError} from '../errors/custom-api.js';
 import {initializePayment, verifyPayment} from '../utils/paystackOps.js';
 
 
@@ -15,11 +15,11 @@ const createOrder = async (req, res) => {
     let subtotal = cart.subTotal
 
     if (!cartItems || cartItems.length < 1) {
-        throw new CustomError.BadRequestError("No cart items provided");
+        throw new CustomAPIError("No cart items provided", 400);
     }
 
     if (!tax || !shippingFee) {
-        throw new CustomError.BadRequestError("Please provide tax and shipping fee");
+        throw new CustomAPIError("Please provide tax and shipping fee", 400);
     }
 
     let orderItems = [...cartItems];
@@ -64,7 +64,7 @@ const getSingleOrder = async (req, res) => {
     const {id: orderId} = req.params;
     const order = await Order.findOne({_id: orderId}).select('-paystackRef -paystackAccesCode');;
     if (!order) {
-        throw new CustomError.NotFoundError(`No order with id : ${orderId}`);
+        throw new CustomAPIError(`No order with id : ${orderId}`, 404);
     }
     checkPermissions(req.user, order.user);
     res.status(200).json({status: true, message: "Order Retrieved", order});
@@ -86,11 +86,11 @@ const updateOrder = async (req, res) => {// this is for updating the order after
     const order = await Order.findOne({_id: orderId});
 
     if (!paystackRef) {
-        throw new CustomError.BadRequestError("No paystackRef");
+        throw new CustomAPIError("No paystackRef", 400);
     }
 
     if (!order) {
-        throw new CustomError.NotFoundError(`No order with id : ${orderId}`);
+        throw new CustomAPIError(`No order with id : ${orderId}`, 404);
     }
 
 

@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import {attachCookiesToResponse, createTokenUser, checkPermissions} from '../utils/index.js';
-import *  as CustomError from '../errors/index.js'
+import {CustomAPIError} from '../errors/custom-api.js';
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({role: 'user'}).select('-password');
@@ -10,7 +10,7 @@ const getAllUsers = async (req, res) => {
 const getSingleUser = async (req, res) => {
   const user = await User.findOne({_id: req.params.id}).select('-password');
   if (!user) {
-    throw new CustomError.NotFoundError(`No user with id : ${req.params.id}`);
+    throw new CustomAPIError(`No user with id : ${req.params.id}`, 404);
   }
   checkPermissions(req.user, user._id);
   res.status(200).json({status: true, message: 'User Retrieved', user});
@@ -26,7 +26,7 @@ const showCurrentUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const {email, name} = req.body;
   if (!email || !name) {
-    throw new CustomError.BadRequestError('Please provide all values');
+    throw new CustomAPIError('Please provide all values', 400);
   }
   const user = await User.findOne({_id: req.user.userId});
 
@@ -43,7 +43,7 @@ const updateUser = async (req, res) => {
 const updateUserPassword = async (req, res) => {
   const {oldPassword, newPassword} = req.body;
   if (!oldPassword || !newPassword) {
-    throw new CustomError.BadRequestError('Please provide both values');
+    throw new CustomAPIError('Please provide both values', 400);
   }
   const user = await User.findOne({_id: req.user.userId});
 
@@ -51,7 +51,7 @@ const updateUserPassword = async (req, res) => {
   const isPasswordCorrect = await user.comparePassword(oldPassword);
 
   if (!isPasswordCorrect) {
-    throw new CustomError.BadRequestError('Invalid Credentials');
+    throw new CustomAPIError('Invalid Credentials', 400);
   }
 
   user.password = newPassword;

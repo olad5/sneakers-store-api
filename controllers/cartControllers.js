@@ -1,7 +1,7 @@
 import {Cart} from '../models/Cart.js'
 import Item from '../models/Item.js';
 import {cartUtil, emptyCartUtil} from '../utils/index.js';
-import *  as CustomError from '../errors/index.js'
+import {CustomAPIError} from '../errors/custom-api.js';
 
 
 const outOfStockUtil = async (quantInStock, quantInCart, quantity) => {
@@ -20,7 +20,7 @@ const addItemToCart = async (req, res) => {
   const productDetails = await Item.findOne({_id: itemId});// find the specific item
 
   if (!productDetails) {
-    throw new CustomError.NotFoundError('Item not found');
+    throw new CustomAPIError('Item not found', 404);
   }
   //--If Cart Exists ----
   if (cart) {
@@ -34,7 +34,7 @@ const addItemToCart = async (req, res) => {
       //----------checks if the product is out of stock -------
       const isInStock = await outOfStockUtil(productDetails.inventory, cart.items[indexFound].quantity, quantity);
       if (isInStock) {
-        throw new CustomError.BadRequestError("Item out of Stock");
+        throw new CustomAPIError("Item out of Stock", 400);
 
       }
       //----------check if product exist,just add the previous quantity with the new quantity and update the total price-------
@@ -55,7 +55,7 @@ const addItemToCart = async (req, res) => {
     }
 
     else {// user gives invalid request
-      throw new CustomError.BadRequestError("Invalid request");
+      throw new CustomAPIError("Invalid request", 400);
     }
     let data = await cart.save();
     res.status(200).json({status: true, message: "Item added to cart", data: data})
@@ -81,7 +81,7 @@ const getCart = async (req, res) => {
 
   const cart = await cartUtil(req.user.userId)
   if (!cart) {
-    throw new CustomError.NotFoundError("Cart Not Found");
+    throw new CustomAPIError("Cart Not Found", 404);
   }
   res.status(200).json({status: true, message: "Cart retrieved", data: cart})
 }
@@ -91,20 +91,20 @@ const updateCart = async (req, res) => {
   const quantity = Number.parseInt(req.body.quantity);
   const cart = await cartUtil(req.user.userId)
   if (!cart) {
-    throw new CustomError.NotFoundError("Cart Not Found");
+    throw new CustomAPIError("Cart Not Found", 404);
   }
   const productDetails = await Item.findOne({_id: itemId});
   const indexFound = cart.items.findIndex(item => item.itemId.id == itemId);
 
   // if the item doesnt exist or it is not in the cart 
   if (!productDetails || indexFound === -1) {
-    throw new CustomError.NotFoundError("Item Not Found");
+    throw new CustomAPIError("Item Not Found", 404);
   }
 
   // checks if the new quantity value is greater than the inventory
   const isInStock = await outOfStockUtil(productDetails.inventory, 0, quantity);
   if (isInStock) {
-    throw new CustomError.BadRequestError("Item out of Stock");
+    throw new CustomAPIError("Item out of Stock", 400);
   }
 
   // Make the changes if the quantity is less or equal to the inventory
@@ -121,14 +121,14 @@ const deleteItemFromCart = async (req, res) => {
   const itemId = req.body.itemId;
   let cart = await cartUtil(req.user.userId)
   if (!cart) {
-    throw new CustomError.NotFoundError("Cart Not Found");
+    throw new CustomAPIError("Cart Not Found", 404);
   }
   const productDetails = await Item.findOne({_id: itemId});
   const indexFound = cart.items.findIndex(item => item.itemId.id == itemId);
 
   // if the item doesnt exist or it is not in the cart return not found
   if (!productDetails || indexFound === -1) {
-    throw new CustomError.NotFoundError('Item not found');
+    throw new CustomAPIError('Item not found', 404);
   }
   cart.items.splice(indexFound, 1);// Deletes the item from the cart
   if (cart.items.length !== 0) {
@@ -143,7 +143,7 @@ const deleteItemFromCart = async (req, res) => {
 const emptyUserCart = async (req, res) => {
   let data = await emptyCartUtil(req.user.userId)
   if (data === 404) {
-    throw new CustomError.NotFoundError("Cart Not Found");
+    throw new CustomAPIError("Cart Not Found", 404);
   }
 
   res.status(200).json({status: true, message: "Cart Has been emptied", data: data})
